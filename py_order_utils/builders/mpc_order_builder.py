@@ -31,7 +31,7 @@ class MpcOrderBuilder(BaseBuilder):
         if data.signer is None:
             data.signer = data.maker
 
-        if data.signer != self.signer.ota_account:  # Cambiar a ota_account
+        if data.signer != self.signer.ota_account:  
             raise ValidationException("Signer does not match")
 
         if data.expiration is None:
@@ -60,11 +60,13 @@ class MpcOrderBuilder(BaseBuilder):
         Signs the order using MPC
         """
         value_to_sign = self._create_struct_hash(_order)
-        
+        print("value_to_sign 1: ", value_to_sign)
+
         if value_to_sign.startswith('0x'):
             value_to_sign = value_to_sign[2:]
-        
+        print("value_to_sign send to the contract: ", value_to_sign)
         sig = await self.signer.sign(value_to_sign)
+        print("sig 1: ", sig)
         return sig
 
     async def build_signed_order(self, data: OrderData) -> SignedOrder:
